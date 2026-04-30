@@ -1,0 +1,22 @@
+{
+  "name": "aplicativo-web",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nakkzh/Barbearia-digital-PROJECT.git"
+  },
+  "author": "João Guilherme",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nakkzh/Barbearia-digital-PROJECT/issues"
+  },
+  "homepage": "https://github.com/Nakkzh/Barbearia-digital-PROJECT#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
