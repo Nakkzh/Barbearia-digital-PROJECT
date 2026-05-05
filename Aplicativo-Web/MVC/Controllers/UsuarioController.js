@@ -1,8 +1,16 @@
+const UsuarioService = require('../SERVICES/UsuarioService')
 class UsuarioController
 {
-    index(req, res)
+    constructor()
     {
-        res.render("Usuario/UsuarioView")
+        this.usuarioService = new UsuarioService()
+        this.index = this.index.bind(this)
+    }
+
+    async index(req, res)
+    {
+        const usuarios = await this.usuarioService.buscarUsuario(req.params.id)
+        res.render("Usuario/UsuarioView", { usuarios })
     }
 }
 
