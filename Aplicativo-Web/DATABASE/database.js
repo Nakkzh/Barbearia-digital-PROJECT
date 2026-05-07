@@ -1,4 +1,4 @@
-modele.exports = 
+module.exports = 
 {
     dialect: "mysql",
     host: "localhost",

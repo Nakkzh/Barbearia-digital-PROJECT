@@ -1,0 +1,68 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="">
+        <h1>Cadastro de Usuario</h1>
+        <div>
+            <div>
+                <input type="username" id="username">
+            </div>
+        </div>
+        <div>
+            <div>
+                <input type="email" id="email">
+            </div>
+        </div>
+        <div>
+            <div>
+                <input type="password" id="senha">
+            </div>
+        </div>
+        <div>
+            <button id="btnCadastrarUsuario" type="submit">Cadastrar</button>
+        </div>
+    </form>
+</body>
+<script>
+    const btnCadastrarUsuario = document.getElementById("btnCadastrarUsuario")
+    btnCadastrarUsuario.addEventListener("click", CadastrarUsuario)
+
+    async function CadastrarUsuario(e)
+    {
+        e.preventDefault()
+
+        const username = document.getElementById("username")
+        const email = document.getElementById("email")
+        const senha = document.getElementById("senha")
+        
+        const url = "/user/create"
+        const response = await fetch(url, 
+        {
+            method: "POST",
+            headers: 
+            {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(
+                {
+                    username: username.value,
+                    email: email.value,
+                    senha: senha.value
+                }
+            ),
+        })
+        const data = await response.json()
+        
+        if(!response.ok)
+        {
+            console.log("Erro ao cadastrar usuario")
+        }
+        console.log(data)
+        
+    }
+</script>
+</html>

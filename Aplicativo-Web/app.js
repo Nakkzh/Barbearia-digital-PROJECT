@@ -19,4 +19,4 @@ async function run()
     {
         console.error("Erro ao conectar com o banco de dados:", error)
     }
-}
+} run()
