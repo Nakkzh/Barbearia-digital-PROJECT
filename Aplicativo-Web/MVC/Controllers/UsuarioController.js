@@ -12,9 +12,20 @@ class UsuarioController
         res.render("Usuario/UsuarioView", { usuarios })
     }
 
+    async usuarioListView(req, res)
+    {
+        const usuarios = await this.usuarioService.buscarTodosUsuario()
+        res.render("Usuario/ListView", { usuarios: usuarios })
+    }
+
+    async usuarioCreateView(req, res)
+    {
+        res.render("Usuario/CreateView")
+    }
     async usuarioEditView(req, res)
     {
-        res.render("Usuario/EditView")
+        const usuario = await this.usuarioService.buscarUsuario(req.params.id)
+        res.render("Usuario/EditView", { usuario: usuario })
     }
     async usuarioPostAsync(req, res)
     {
@@ -24,6 +35,23 @@ class UsuarioController
             req.body.senha
         )
         res.json({ id : id })
+    }
+    async usuarioPutAsync(req, res)
+    {
+        const affectedRows = await this.usuarioService.atualizarUsuario(
+            req.body.id,
+            req.body.username,
+            req.body.email,
+            req.body.senha
+        )
+        res.json({ affectedRows : affectedRows })
+    }
+
+    async usuariodeleteAsync(req, res)
+    {
+        const affectedRows = await this.usuarioService.deletarUsuario(req.params.id)
+        
+        res.json({ affectedRows : affectedRows })
     }
 }
 

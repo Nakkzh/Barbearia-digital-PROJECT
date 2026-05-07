@@ -2,20 +2,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit</title>
+    <title>Create</title>
 </head>
 <body>
     <form action="">
-        <h1>Edição de Usuario</h1>
-        <input value="<%= usuario.id %>" type="text" id="usuarioid" hidden>
+        <h1>Cadastro de Usuario</h1>
         <div>
             <div>
-                <input value="<%= usuario.username %>" type="username" id="username">
+                <input type="username" id="username">
             </div>
         </div>
         <div>
             <div>
-                <input value="<%= usuario.email %>" type="email" id="email">
+                <input type="email" id="email">
             </div>
         </div>
         <div>
@@ -30,28 +29,26 @@
 </body>
 <script>
     const btnCadastrarUsuario = document.getElementById("btnCadastrarUsuario")
-    btnCadastrarUsuario.addEventListener("click", EditarUsuario)
+    btnCadastrarUsuario.addEventListener("click", CadastrarUsuario)
 
-    async function EditarUsuario(e)
+    async function CadastrarUsuario(e)
     {
         e.preventDefault()
 
-        const id = document.getElementById("usuarioid")
         const username = document.getElementById("username")
         const email = document.getElementById("email")
         const senha = document.getElementById("senha")
         
-        const url = "/user/edit"
+        const url = "/user/create"
         const response = await fetch(url, 
         {
-            method: "PUT",
+            method: "POST",
             headers: 
             {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(
                 {
-                    id : id.value,
                     username: username.value,
                     email: email.value,
                     senha: senha.value

@@ -1,0 +1,54 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List</title>
+</head>
+<body>
+    <h1>Lista de Usuário</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Senha</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for(usuario of usuarios) { %>
+                <tr>
+                    <td><%= usuario.id %></td>
+                    <td><%= usuario.username %></td>
+                    <td><%= usuario.email %></td>
+                    <td><%= usuario.senha %></td>
+                    <td>
+                        <a href="/user/edit/<%= usuario.id %>">Editar</a>
+                        <button onclick= "apagarUsuario('<%= usuario.id %>')" id="btnApagar">Apagar</button>
+                    </td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</body>
+
+<script>
+    async function apagarUsuario(id)
+    {
+    const url = "/user/edit"
+        const response = await fetch(url, 
+        {
+            method: "DELETE",})
+
+        const data = await response.json()
+    
+        if(!response.ok)
+        {
+            console.log("Erro ao cadastrar usuario")
+        }
+        console.log(data)
+    }
+</script>
+</html>
