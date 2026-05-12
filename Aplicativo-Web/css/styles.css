@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 
-/* ===== VARIÁVEIS ===== */
+/* VARIÁVEIS */
 :root {
   --bg-primary: #121212;
   --bg-secondary: #1e1e1e;
@@ -19,7 +19,7 @@
   --radius: 8px;
 }
 
-/* ===== BODY ===== */
+/* BODY */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: var(--bg-primary);
@@ -29,7 +29,7 @@ body {
   line-height: 1.6;
 }
 
-/* ===== CONTAINER ===== */
+/* CONTAINER */
 .container {
   max-width: 600px;
   margin: 0 auto;
@@ -40,7 +40,7 @@ body {
   margin: 0 auto;
 }
 
-/* ===== TÍTULOS ===== */
+/* TÍTULOS */
 h1 {
   font-size: 1.75rem;
   font-weight: 600;
@@ -48,7 +48,7 @@ h1 {
   color: var(--text-primary);
 }
 
-/* ===== FORMULÁRIO ===== */
+/* FORMULÁRIO */
 form {
   background-color: var(--bg-card);
   padding: 30px;
@@ -90,7 +90,7 @@ input::placeholder {
   color: var(--text-secondary);
 }
 
-/* ===== BOTÕES ===== */
+/* BOTÕES */
 .btn {
   display: inline-block;
   padding: 12px 24px;
@@ -141,7 +141,7 @@ input::placeholder {
   width: 100%;
 }
 
-/* ===== TABELA ===== */
+/* TABELA */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -177,7 +177,7 @@ tbody tr:hover {
   background-color: var(--bg-secondary);
 }
 
-/* ===== AÇÕES DA TABELA ===== */
+/* AÇÕES DA TABELA */
 .actions {
   display: flex;
   gap: 8px;
@@ -189,7 +189,7 @@ tbody tr:hover {
   font-size: 0.8rem;
 }
 
-/* ===== LINKS ===== */
+/* LINKS */
 a {
   color: var(--accent);
   text-decoration: none;
@@ -199,7 +199,7 @@ a:hover {
   text-decoration: underline;
 }
 
-/* ===== HEADER DA PÁGINA ===== */
+/* HEADER DA PÁGINA */
 .page-header {
   display: flex;
   justify-content: space-between;
@@ -211,7 +211,7 @@ a:hover {
   margin-bottom: 0;
 }
 
-/* ===== UTILITÁRIOS ===== */
+/* UTILITÁRIOS */
 .mt-20 {
   margin-top: 20px;
 }
