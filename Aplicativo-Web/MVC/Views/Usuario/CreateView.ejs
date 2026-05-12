@@ -1,31 +1,36 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create</title>
+    <title>Cadastrar Usuário</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <form action="">
-        <h1>Cadastro de Usuario</h1>
-        <div>
-            <div>
-                <input type="username" id="username">
+    <div class="container">
+        <form action="">
+            <h1>Cadastro de Usuário</h1>
+            
+            <div class="form-group">
+                <label for="username">Nome de usuário</label>
+                <input type="text" id="username" placeholder="Digite o nome de usuário">
             </div>
-        </div>
-        <div>
-            <div>
-                <input type="email" id="email">
+            
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" placeholder="Digite o e-mail">
             </div>
-        </div>
-        <div>
-            <div>
-                <input type="password" id="senha">
+            
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" placeholder="Digite a senha">
             </div>
-        </div>
-        <div>
-            <button id="btnCadastrarUsuario" type="submit">Cadastrar</button>
-        </div>
-    </form>
+            
+            <div class="mt-20">
+                <button id="btnCadastrarUsuario" type="submit" class="btn btn-primary btn-block">Cadastrar</button>
+            </div>
+        </form>
+    </div>
 </body>
 <script>
     const btnCadastrarUsuario = document.getElementById("btnCadastrarUsuario")
@@ -61,8 +66,6 @@
         {
             console.log("Erro ao cadastrar usuario")
         }
-        console.log(data)
-        
     }
 </script>
 </html>

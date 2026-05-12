@@ -1,5 +1,6 @@
 class Usuario
 {
+    #id
     #email
     #senha
     #nome
@@ -11,6 +12,10 @@ class Usuario
         this.#email = email
         this.#senha = senha
         this.#nome = nome
+    }
+    get id()
+    {
+        return this.#id
     }
 
     get email()
@@ -31,6 +36,11 @@ class Usuario
     set email(valor)
     {
         this.#email = valor
+    }
+
+    set id(valor)
+    {
+        this.#id = valor
     }
 
     #validarEmail(email)
