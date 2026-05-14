@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Usuário</title>
+    <title>Editar Atendimento</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -56,13 +56,13 @@
             <div class="page-header">
                 <div class="page-title">
                     <div>
-                        <h1>Editar Usuário</h1>
+                        <h1>Editar Atendimento</h1>
                         <div class="breadcrumb">
                             <a href="/user/index">Início</a>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                            <a href="/user/list">Lista de Usuários</a>
+                            <a href="/atendimento/list">Lista de Atendimentos</a>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                            <span>Editar Usuário</span>
+                            <span>Editar Atendimento</span>
                         </div>
                     </div>
                 </div>
@@ -70,25 +70,38 @@
 
             <div class="container">
                 <form id="formEditar">
-                    <input value="<%= usuario.id %>" type="hidden" id="usuarioid">
+                    <input value="<%= atendimento.id %>" type="hidden" id="atendimentoId">
                     <div class="form-group">
-                        <label for="username">Nome de usuário</label>
-                        <input value="<%= usuario.username %>" type="text" id="username" placeholder="Digite o nome de usuário" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">E-mail</label>
-                        <input value="<%= usuario.email %>" type="email" id="email" placeholder="Digite o e-mail" required>
+                        <label for="nomeCliente">Nome do Cliente</label>
+                        <input value="<%= atendimento.nomeCliente %>" type="text" id="nomeCliente" required>
                     </div>
                     <div class="form-group">
-                        <label for="senha">Nova senha</label>
-                        <input type="password" id="senha" placeholder="Digite a nova senha (deixe em branco para manter)">
+                        <label for="telefone">Telefone</label>
+                        <input value="<%= atendimento.telefone %>" type="tel" id="telefone" required>
                     </div>
-                    <div class="alert alert-warning mt-16">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
-                        <span>Deixe o campo de senha em branco se não quiser alterá-la.</span>
+                    <div class="form-group">
+                        <label for="dataNascimento">Data de Nascimento</label>
+                        <input value="<%= atendimento.dataNascimento %>" type="date" id="dataNascimento" required>
                     </div>
+                    <div class="form-group">
+                        <label for="dataAtendimento">Data do Atendimento</label>
+                        <input value="<%= atendimento.dataAtendimento %>" type="date" id="dataAtendimento" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="horarioAtendimento">Horário do Atendimento</label>
+                        <input value="<%= atendimento.horarioAtendimento %>" type="time" id="horarioAtendimento" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipoServico">Tipo de Serviço</label>
+                        <input value="<%= atendimento.tipoServico %>" type="text" id="tipoServico" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="profissional">Profissional</label>
+                        <input value="<%= atendimento.profissional %>" type="text" id="profissional" required>
+                    </div>
+                    
                     <div class="mt-24 flex gap-16">
-                        <a href="/user/list" class="btn btn-secondary">
+                        <a href="/atendimento/list" class="btn btn-secondary">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
                             Voltar
                         </a>
@@ -108,11 +121,11 @@
             document.getElementById(menuId).classList.toggle('open');
         }
 
+        // Lógica de Ativação de Links e Menus (Sidebar)
         (function() {
             const path = window.location.pathname;
-            document.querySelectorAll('.nav-collapsible-toggle').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.nav-collapsible').forEach(m => m.classList.remove('open'));
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.querySelectorAll('.nav-collapsible-toggle, .nav-item').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-collapsible').forEach(el => el.classList.remove('open'));
 
             if (path === '/user/index' || path === '/') {
                 document.querySelector('a[href="/user/index"]')?.classList.add('active');
@@ -127,18 +140,23 @@
             }
         })();
 
+        // Envio do Formulário de Edição
         document.getElementById('formEditar').addEventListener('submit', async (e) => {
             e.preventDefault();
             const alertContainer = document.getElementById('alertContainer');
             const dados = {
-                id: document.getElementById('usuarioid').value,
-                username: document.getElementById('username').value,
-                email: document.getElementById('email').value,
-                senha: document.getElementById('senha').value
+                id: document.getElementById('atendimentoId').value,
+                nomeCliente: document.getElementById('nomeCliente').value,
+                telefone: document.getElementById('telefone').value,
+                dataNascimento: document.getElementById('dataNascimento').value,
+                dataAtendimento: document.getElementById('dataAtendimento').value,
+                horarioAtendimento: document.getElementById('horarioAtendimento').value,
+                tipoServico: document.getElementById('tipoServico').value,
+                profissional: document.getElementById('profissional').value
             };
 
             try {
-                const response = await fetch('/user/edit', {
+                const response = await fetch('/atendimento/edit', {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(dados)
@@ -146,12 +164,12 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    alertContainer.innerHTML = `<div class="alert alert-success"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg><span>Usuário atualizado com sucesso!</span></div>`;
+                    alertContainer.innerHTML = `<div class="alert alert-success"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg><span>Atendimento atualizado com sucesso!</span></div>`;
                 } else {
-                    alertContainer.innerHTML = `<div class="alert alert-error"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" x2="9" y1="9" y2="15"/><line x1="9" x2="15" y1="9" y2="15"/></svg><span>Erro ao atualizar: ${data.message || 'Tente novamente.'}</span></div>`;
+                    alertContainer.innerHTML = `<div class="alert alert-error"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" x2="9" y1="9" y2="15"/><line x1="9" x2="15" y1="9" y2="15"/></svg><span>Erro: ${data.message || 'Tente novamente.'}</span></div>`;
                 }
             } catch (error) {
-                alertContainer.innerHTML = `<div class="alert alert-error"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" x2="9" y1="9" y2="15"/><line x1="9" x2="15" y1="9" y2="15"/></svg><span>Erro ao conectar com o servidor.</span></div>`;
+                alertContainer.innerHTML = `<div class="alert alert-error"><span>Erro ao conectar com o servidor.</span></div>`;
             }
         });
     </script>

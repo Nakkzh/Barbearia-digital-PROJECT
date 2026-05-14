@@ -46,6 +46,12 @@ class UsuarioController {
         const affectedRows = await this.usuarioService.deletarUsuario(req.params.id)
         res.json({ affectedRows: affectedRows })
     }
+    
+    index(req, res) {
+        res.render("Usuario/UsuarioView", { 
+            currentPage: 'dashboard' 
+        })
+    }
 }
 
 module.exports = new UsuarioController()

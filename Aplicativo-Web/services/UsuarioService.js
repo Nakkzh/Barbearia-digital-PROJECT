@@ -65,20 +65,18 @@ class UsuarioService
     async atualizarUsuario(id, username, email, senha)
     {
         let rows = 0
-
-        const usuario = await this.#usuarioSchema.buscarUsuario(id)
+    
+        const usuario = await this.buscarUsuario(id)
+    
         if (usuario)
         {
-            const model = new usuario
-            (
+            const model = new Usuario(
                 email || usuario.email,
                 senha || usuario.senha,
                 username || usuario.username
             )
-        
-
-            const affectedRows = await this.#usuarioSchema.update
-            (
+    
+            const affectedRows = await this.#usuarioSchema.update(
                 {
                     username: model.nome,
                     email: model.email,
@@ -88,9 +86,10 @@ class UsuarioService
                     where: { id: id }
                 }
             )
+    
             rows = affectedRows
         }
-        
+    
         return rows
     }
 }
