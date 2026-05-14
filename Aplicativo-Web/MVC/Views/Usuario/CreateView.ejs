@@ -3,69 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Usuário</title>
+    <title>Cadastrar Usuário - Sistema de Usuários</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <form action="">
-            <h1>Cadastro de Usuário</h1>
-            
-            <div class="form-group">
-                <label for="username">Nome de usuário</label>
-                <input type="text" id="username" placeholder="Digite o nome de usuário">
+    <div class="app-layout">
+
+        <aside class="sidebar" id="sidebar">
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Principal</div>
+                    <a href="/user/index" class="nav-item">Dashboard</a>
+                    <a href="/user/list" class="nav-item">Listar Usuários</a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Ações</div>
+                    <a href="/user/create" class="nav-item active">Cadastrar Usuário</a>
+                    <a href="/user/list" class="nav-item">Editar Usuário</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <div class="page-title">
+                    <div>
+                        <h1>Cadastrar Usuário</h1>
+                        <div class="breadcrumb">
+                            <a href="/user/index">Início</a>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m9 18 6-6-6-6"/>
+                            </svg>
+                            <span>Cadastrar Usuário</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-            <div class="form-group">
-                <label for="email">E-mail</label>
-                <input type="email" id="email" placeholder="Digite o e-mail">
+
+            <div class="container">
+                <form id="formCadastro">
+                    <div class="form-group">
+                        <label for="username">Nome de usuário</label>
+                        <input type="text" id="username" placeholder="Digite o nome de usuário" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" placeholder="Digite o e-mail" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="senha">Senha</label>
+                        <input type="password" id="senha" placeholder="Digite a senha" required>
+                    </div>
+                    
+                    <div class="mt-24 flex gap-16">
+                        <a href="/user/list" class="btn btn-secondary">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m12 19-7-7 7-7"/>
+                                <path d="M19 12H5"/>
+                            </svg>
+                            Voltar
+                        </a>
+                        <button id="btnCadastrarUsuario" type="submit" class="btn btn-primary" style="flex: 1;">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <line x1="19" x2="19" y1="8" y2="14"/>
+                                <line x1="22" x2="16" y1="11" y2="11"/>
+                            </svg>
+                            Cadastrar Usuário
+                        </button>
+                    </div>
+                </form>
+
+                <div id="alertContainer" class="mt-24"></div>
             </div>
-            
-            <div class="form-group">
-                <label for="senha">Senha</label>
-                <input type="password" id="senha" placeholder="Digite a senha">
-            </div>
-            
-            <div class="mt-20">
-                <button id="btnCadastrarUsuario" type="submit" class="btn btn-primary btn-block">Cadastrar</button>
-            </div>
-        </form>
+        </main>
     </div>
-</body>
-<script>
-    const btnCadastrarUsuario = document.getElementById("btnCadastrarUsuario")
-    btnCadastrarUsuario.addEventListener("click", CadastrarUsuario)
 
-    async function CadastrarUsuario(e)
-    {
-        e.preventDefault()
+    <script>
+        const formCadastro = document.getElementById('formCadastro');
+        const alertContainer = document.getElementById('alertContainer');
 
-        const username = document.getElementById("username")
-        const email = document.getElementById("email")
-        const senha = document.getElementById("senha")
-        
-        const url = "/user/create"
-        const response = await fetch(url, 
-        {
-            method: "POST",
-            headers: 
-            {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(
-                {
-                    username: username.value,
-                    email: email.value,
-                    senha: senha.value
+        formCadastro.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+            
+            try {
+                const response = await fetch('/user/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, email, senha })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alertContainer.innerHTML = `
+                        <div class="alert alert-success">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <path d="m9 11 3 3L22 4"/>
+                            </svg>
+                            <span>Usuário cadastrado com sucesso!</span>
+                        </div>
+                    `;
+                    formCadastro.reset();
+                } else {
+                    alertContainer.innerHTML = `
+                        <div class="alert alert-error">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="15" x2="9" y1="9" y2="15"/>
+                                <line x1="9" x2="15" y1="9" y2="15"/>
+                            </svg>
+                            <span>Erro ao cadastrar usuário: ${data.message || 'Tente novamente.'}</span>
+                        </div>
+                    `;
                 }
-            ),
-        })
-        const data = await response.json()
-        
-        if(!response.ok)
-        {
-            console.log("Erro ao cadastrar usuario")
-        }
-    }
-</script>
+            } catch (error) {
+                console.error('Erro:', error);
+                alertContainer.innerHTML = `
+                    <div class="alert alert-error">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="15" x2="9" y1="9" y2="15"/>
+                            <line x1="9" x2="15" y1="9" y2="15"/>
+                        </svg>
+                        <span>Erro ao conectar com o servidor.</span>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
 </html>

@@ -3,74 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Usuário</title>
+    <title>Editar Usuário - Sistema de Usuários</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <form action="">
-            <h1>Edição de Usuário</h1>
-            
-            <input value="<%= usuario.id %>" type="text" id="usuarioid" hidden>
-            
-            <div class="form-group">
-                <label for="username">Nome de usuário</label>
-                <input value="<%= usuario.username %>" type="text" id="username" placeholder="Digite o nome de usuário">
+    <div class="app-layout">
+
+        <aside class="sidebar" id="sidebar">
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Principal</div>
+                    <a href="/user/index" class="nav-item">Dashboard</a>
+                    <a href="/user/list" class="nav-item">Listar Usuários</a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Ações</div>
+                    <a href="/user/create" class="nav-item">Cadastrar Usuário</a>
+                    <a href="/user/list" class="nav-item active">Editar Usuário</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <div class="page-title">
+                    <div>
+                        <h1>Editar Usuário</h1>
+                        <div class="breadcrumb">
+                            <a href="/user/index">Início</a>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m9 18 6-6-6-6"/>
+                            </svg>
+                            <a href="/user/list">Lista de Usuários</a>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m9 18 6-6-6-6"/>
+                            </svg>
+                            <span>Editar Usuário</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-            <div class="form-group">
-                <label for="email">E-mail</label>
-                <input value="<%= usuario.email %>" type="email" id="email" placeholder="Digite o e-mail">
+
+            <div class="container">
+                <form id="formEditar">
+                    <input value="<%= usuario.id %>" type="hidden" id="usuarioid">
+
+                    <div class="form-group">
+                        <label for="username">Nome de usuário</label>
+                        <input value="<%= usuario.username %>" type="text" id="username" placeholder="Digite o nome de usuário" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input value="<%= usuario.email %>" type="email" id="email" placeholder="Digite o e-mail" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="senha">Nova senha</label>
+                        <input type="password" id="senha" placeholder="Digite a nova senha (deixe em branco para manter)">
+                    </div>
+
+                    <div class="alert alert-warning mt-16">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                            <line x1="12" x2="12" y1="9" y2="13"/>
+                            <line x1="12" x2="12.01" y1="17" y2="17"/>
+                        </svg>
+                        <span>Deixe o campo de senha em branco se não quiser alterá-la.</span>
+                    </div>
+                    
+                    <div class="mt-24 flex gap-16">
+                        <a href="/user/list" class="btn btn-secondary">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m12 19-7-7 7-7"/>
+                                <path d="M19 12H5"/>
+                            </svg>
+                            Voltar
+                        </a>
+                        <button id="btnEditarUsuario" type="submit" class="btn btn-primary" style="flex: 1;">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                                <polyline points="17 21 17 13 7 13 7 21"/>
+                                <polyline points="7 3 7 8 15 8"/>
+                            </svg>
+                            Salvar Alterações
+                        </button>
+                    </div>
+                </form>
+
+                <div id="alertContainer" class="mt-24"></div>
             </div>
-            
-            <div class="form-group">
-                <label for="senha">Nova senha</label>
-                <input type="password" id="senha" placeholder="Digite a nova senha">
-            </div>
-            
-            <div class="mt-20">
-                <button id="btnEditarUsuario" type="submit" class="btn btn-primary btn-block">Salvar Alterações</button>
-            </div>
-        </form>
+        </main>
     </div>
-</body>
-<script>
-    const btnEditarUsuario = document.getElementById("btnEditarUsuario")
-    btnEditarUsuario.addEventListener("click", EditarUsuario)
 
-    async function EditarUsuario(e)
-    {
-        e.preventDefault()
+    <script>
+        const formEditar = document.getElementById('formEditar');
+        const alertContainer = document.getElementById('alertContainer');
 
-        const id = document.getElementById("usuarioid")
-        const username = document.getElementById("username")
-        const email = document.getElementById("email")
-        const senha = document.getElementById("senha")
-        
-        const url = "/user/edit"
-        const response = await fetch(url, 
-        {
-            method: "PUT",
-            headers: 
-            {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(
-                {
-                    id: id.value,
-                    username: username.value,
-                    email: email.value,
-                    senha: senha.value
+        formEditar.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const id = document.getElementById('usuarioid').value;
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+            
+            try {
+                const response = await fetch('/user/edit', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id, username, email, senha })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alertContainer.innerHTML = `
+                        <div class="alert alert-success">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <path d="m9 11 3 3L22 4"/>
+                            </svg>
+                            <span>Usuário atualizado com sucesso!</span>
+                        </div>
+                    `;
+                } else {
+                    alertContainer.innerHTML = `
+                        <div class="alert alert-error">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="15" x2="9" y1="9" y2="15"/>
+                                <line x1="9" x2="15" y1="9" y2="15"/>
+                            </svg>
+                            <span>Erro ao atualizar usuário: ${data.message || 'Tente novamente.'}</span>
+                        </div>
+                    `;
                 }
-            ),
-        })
-        const data = await response.json()
-        
-        if(!response.ok)
-        {
-            console.log("Erro ao editar usuario")
-        }
-        console.log(data)
-    }
-</script>
+            } catch (error) {
+                console.error('Erro:', error);
+                alertContainer.innerHTML = `
+                    <div class="alert alert-error">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="15" x2="9" y1="9" y2="15"/>
+                            <line x1="9" x2="15" y1="9" y2="15"/>
+                        </svg>
+                        <span>Erro ao conectar com o servidor.</span>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
 </html>
