@@ -41,6 +41,6 @@ Atendimento.init({
 });
 
 Usuario.hasMany(Atendimento, { foreignKey: 'usuarioId', as: 'atendimentos' });
-Atendimento.belongsTo(Usuario, { foreignKey: 'usuarioId', as: 'usuario' });
+Atendimento.belongsTo(Usuario, { foreignKey: 'usuarioId', as: 'users' });
 
 module.exports = Atendimento

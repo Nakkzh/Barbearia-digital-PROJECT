@@ -24,6 +24,6 @@ router.get("/atendimento/edit/:id", (req, res) => AtendimentoController.atendime
 
 router.get("/atendimento/list", (req, res) => AtendimentoController.atendimentoListView(req, res))
 
-router.delete("/atendimento/delete/:id", (req, res) => AtendimentoController.atendimentodeleteAsync(req, res))
+router.delete('/atendimento/:id', AtendimentoController.atendimentoDeleteAsync.bind(AtendimentoController));
 
 module.exports = router

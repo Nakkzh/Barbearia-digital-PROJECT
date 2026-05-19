@@ -155,7 +155,7 @@
         async function apagarAtendimento(id) {
             if (!confirm('Tem certeza que deseja apagar este atendimento?')) return;
             try {
-                const response = await fetch('/atendimento/delete/' + id, {
+                const response = await fetch('/atendimento/' + id, { 
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' }
                 });

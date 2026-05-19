@@ -1,53 +1,60 @@
 const Atendimento = require("../MVC/Models/AtendimentoModel");
-const Usuario = require("../SCHEMAS/UsuarioSchema"); // Para o include
+const Usuario = require("../SCHEMAS/UsuarioSchema");
 const AtendimentoSchema = require("../SCHEMAS/AtendimentoSchema");
+const { Op } = require('sequelize')
+const moment = require('moment')
 
 class AtendimentoService {
 
     #atendimentoSchema
-    
-    constructor() {     
+
+    constructor() {
         this.#atendimentoSchema = AtendimentoSchema;
     }
 
-    async buscarAtendimento(id) {   
-       const dado = await this.#atendimentoSchema.findOne({
+    async buscarAtendimento(id) {
+        const dado = await this.#atendimentoSchema.findOne({
             where: { id: id },
-            include: "usuario" // ⬅️ alias correto
+            include: "users"
         });
 
-        if(!dado) return null;
+        if (!dado) {
+            return null
+        }
 
-       const atendimento = new Atendimento(
-        dado.nomeCliente,
-        dado.telefone,
-        dado.horarioAtendimento,
-        dado.dataAtendimento,
-        dado.dataNascimento,
-        dado.tipoServico,
-        dado.usuario.username // ⬅️ alias correto
-       );
+        const atendimento = new Atendimento(
+            dado.nomeCliente,
+            dado.telefone,
+            dado.horarioAtendimento,
+            dado.dataAtendimento,
+            dado.dataNascimento,
+            dado.tipoServico,
+            dado.users.id
+        )
 
-       atendimento.id = dado.id;
-       return atendimento;
+        atendimento.id = dado.id
+
+        return atendimento;
+
     }
 
-    async deletarAtendimento(id) {   
-        const atendimento = await this.#atendimentoSchema.findOne({
+    async deletarAtendimento(id) {
+        // Deleta direto pelo ID e retorna a quantidade de linhas apagadas (0 ou 1)
+        const affectedRows = await this.#atendimentoSchema.destroy({
             where: { id: id }
         });
-
-        const affectedRows = await atendimento.destroy();
-        return affectedRows;
+    
+        return affectedRows; // <--- MUITO IMPORTANTE: Retornar o valor para o controller!
     }
 
-    async buscarTodosAtendimentos() {   
-        const atendimentos = [];
+    async buscarTodosAtendimentos() {
+        const atendimentos = []
         const dados = await this.#atendimentoSchema.findAll({
-            include: "usuario" // ⬅️ alias correto
+            include: "users"
         });
 
-        for(const atendimento of dados) {            
+
+        for (const atendimento of dados) {
             const a = new Atendimento(
                 atendimento.nomeCliente,
                 atendimento.telefone,
@@ -55,14 +62,16 @@ class AtendimentoService {
                 atendimento.dataAtendimento,
                 atendimento.dataNascimento,
                 atendimento.tipoServico,
-                atendimento.usuario.username // ⬅️ alias correto
-            );
-            
-            a.id = atendimento.id;
-            atendimentos.push(a);
+                atendimento.users.username
+            )
+
+            a.id = atendimento.id
+
+            atendimentos.push(a)
         }
 
-        return atendimentos;
+        return atendimentos
+
     }
 
     async cadastrarAtendimento(
@@ -72,56 +81,144 @@ class AtendimentoService {
         dataAtendimento,
         dataNascimento,
         tipoServico,
-        usuarioId,
-        profissional // opcional
+        profissional
     ) {
-        // Validação simples
-        if (!nomeCliente || !telefone || !horarioAtendimento || !dataAtendimento || !dataNascimento || !tipoServico || !usuarioId) {
-            throw new Error("Todos os campos obrigatórios devem ser preenchidos");
-        }
-    
-        // Cria diretamente no Sequelize
-        const novoAtendimento = await this.#atendimentoSchema.create({
+
+        let a = null;
+
+        const atendimento = new Atendimento(
             nomeCliente,
             telefone,
             horarioAtendimento,
             dataAtendimento,
             dataNascimento,
             tipoServico,
-            profissional: profissional || "Profissional padrão",
-            usuarioId
-        });
-    
-        return novoAtendimento;
+            profissional
+        )
+
+        let atendimentoIntervalo = null;
+
+        if (tipoServico == "Corte de Cabelo") {
+            const horario = moment(horarioAtendimento, "HH:mm").add(40,'minutes').format("HH:mm")
+
+            const row = await this.#atendimentoSchema.findOne({
+                where: {
+                    tipoServico: 'Corte de Cabelo',
+                    horarioAtendimento: {
+                        [Op.between]: [horarioAtendimento, horario]
+                    }
+                }
+            })
+
+            if (row) {
+                atendimentoIntervalo = row.horarioAtendimento
+            }
+        }
+        else if(tipoServico == "Barba")
+        {
+            const horario = moment(horarioAtendimento, "HH:mm").add(20,'minutes').format("HH:mm")
+
+            const row = await this.#atendimentoSchema.findOne({
+                where: {
+                    tipoServico: 'Barba',
+                    horarioAtendimento: {
+                        [Op.between]: [horarioAtendimento, horario]
+                    }
+                }
+            })
+
+            if (row) {
+                atendimentoIntervalo = row.horarioAtendimento
+            }
+        }
+        else if(tipoServico == "Sobrancelha")
+        {
+            const horario = moment(horarioAtendimento, "HH:mm").add(10,'minutes').format("HH:mm")
+
+
+            const row = await this.#atendimentoSchema.findOne({
+                where: {
+                    tipoServico: 'Sobrancelha',
+                    horarioAtendimento: {
+                        [Op.between]: [horarioAtendimento, horario]
+                    }
+                }
+            })
+
+            if (row) {
+                atendimentoIntervalo = row.horarioAtendimento
+            }
+        }
+        else
+        {
+            const horario = moment(horarioAtendimento, "HH:mm").add(40,'minutes').format("HH:mm")
+
+
+            const row = await this.#atendimentoSchema.findOne({
+                where: {
+                    tipoServico: 'Outros',
+                    horarioAtendimento: {
+                        [Op.between]: [horarioAtendimento, horario]
+                    }
+                }
+            })
+
+            if (row) {
+                atendimentoIntervalo = row.horarioAtendimento
+            }
+        }
+
+        const validaAtendimento = atendimento.validarConflitoHorario(horarioAtendimento, atendimentoIntervalo)
+
+
+        if (validaAtendimento) {
+             a = await this.#atendimentoSchema.create(
+                {
+                    nomeCliente: atendimento.nomeCliente,
+                    telefone: atendimento.telefone,
+                    horarioAtendimento: atendimento.horarioAtendimento,
+                    dataAtendimento: atendimento.dataAtendimento,
+                    dataNascimento: atendimento.dataNascimento,
+                    tipoServico: atendimento.tipoServico,
+                    profissional: atendimento.profissional,
+                    usuarioId: atendimento.profissional
+                }
+            )
+        }  
+
+        return a;
+
     }
 
     async atualizarAtendimento(
-        id, 
+        id,
         nomeCliente,
         telefone,
         horarioAtendimento,
         dataAtendimento,
         dataNascimento,
         tipoServico,
-        usuarioId // ⬅️ ID do usuário
+        profissional
     ) {
-       
-        let rows = 0;
-        const atendimento = await this.buscarAtendimento(id);
 
-        if(atendimento) {
-           
+        let rows = 0;
+
+        const atendimento = await this.buscarAtendimento(id)
+
+        if (atendimento) {
+
             const model = new Atendimento(
-                nomeCliente || atendimento.nomeCliente , 
+                nomeCliente || atendimento.nomeCliente,
                 telefone || atendimento.telefone,
                 horarioAtendimento || atendimento.horarioAtendimento,
                 dataAtendimento || atendimento.dataAtendimento,
                 dataNascimento || atendimento.dataNascimento,
                 tipoServico || atendimento.tipoServico,
-                usuarioId || atendimento.profissional     
-            );
+                profissional || atendimento.profissional
+            )
 
-            const affectedRows = await this.#atendimentoSchema.update({
+            const affectedRows = await this.#atendimentoSchema.update(
+                {
                     nomeCliente: model.nomeCliente,
                     telefone: model.telefone,
                     horarioAtendimento: model.horarioAtendimento,
@@ -131,14 +228,20 @@ class AtendimentoService {
                     profissional: model.profissional,
                     usuarioId: model.profissional
                 },
-                { where: { id: id } }
-            );
+                {
+                    where: {
+                        id: id
+                    }
+                }
+            )
 
-            rows = affectedRows;
-        }       
+            rows = affectedRows
+        }
 
         return rows;
     }
-}
 
+
+}
+// Corrigido de modules para module
 module.exports = AtendimentoService;

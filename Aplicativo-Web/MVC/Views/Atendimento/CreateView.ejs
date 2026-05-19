@@ -92,10 +92,10 @@
                         <label for="tipoServico">Tipo de Serviço</label>
                         <select id="tipoServico" required>
                             <option value="">Selecione o serviço</option>
-                            <option value="corte_cabelo">Corte de Cabelo</option>
-                            <option value="barba">Barba</option>
-                            <option value="sobrancelha">Sobrancelha</option>
-                            <option value="outros">Outros</option>
+                            <option value="Corte de cabelo">Corte de cabelo</option>
+                            <option value="Barba">Barba</option>
+                            <option value="Sobrancelha">Sobrancelha</option>
+                            <option value="Outros">Outros</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -147,36 +147,51 @@
         })();
 
         document.getElementById('formCadastro').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const alertContainer = document.getElementById('alertContainer');
-            const dados = {
-                nomeCliente: document.getElementById('nomeCliente').value,
-                telefone: document.getElementById('telefone').value,
-                dataNascimento: document.getElementById('dataNascimento').value,
-                dataAtendimento: document.getElementById('dataAtendimento').value,
-                horarioAtendimento: document.getElementById('horarioAtendimento').value,
-                tipoServico: document.getElementById('tipoServico').value,
-                profissional: document.getElementById('profissional').value
-            };
+    e.preventDefault();
+    const alertContainer = document.getElementById('alertContainer');
+    
+    const dados = {
+        nomeCliente: document.getElementById('nomeCliente').value,
+        telefone: document.getElementById('telefone').value,
+        dataNascimento: document.getElementById('dataNascimento').value,
+        dataAtendimento: document.getElementById('dataAtendimento').value,
+        horarioAtendimento: document.getElementById('horarioAtendimento').value,
+        tipoServico: document.getElementById('tipoServico').value,
+        profissional: document.getElementById('profissional').value
+    };
 
-            try {
-                const response = await fetch('/atendimento/create', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(dados)
-                });
-                const data = await response.json();
-
-                if (response.ok) {
-                    alertContainer.innerHTML = `<div class="alert alert-success"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg><span>Atendimento cadastrado com sucesso!</span></div>`;
-                    e.target.reset();
-                } else {
-                    alertContainer.innerHTML = `<div class="alert alert-error"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" x2="9" y1="9" y2="15"/><line x1="9" x2="15" y1="9" y2="15"/></svg><span>Erro ao cadastrar: ${data.message || 'Tente novamente.'}</span></div>`;
-                }
-            } catch (error) {
-                alertContainer.innerHTML = `<div class="alert alert-error"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" x2="9" y1="9" y2="15"/><line x1="9" x2="15" y1="9" y2="15"/></svg><span>Erro ao conectar com o servidor.</span></div>`;
-            }
+    try {
+        const response = await fetch('/atendimento/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dados)
         });
+        
+        const data = await response.json();
+
+        if (response.ok) {
+            if (data.atendimento) {
+                alertContainer.innerHTML = `<div class="alert alert-success"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg><span>Atendimento cadastrado com sucesso!</span></div>`;
+                
+                
+                if (data.atendimento.id && document.getElementById("areaId")) {
+                    document.getElementById("areaId").style.display = "flex";
+                    document.getElementById("atendimentoIdDisplay").value = `#${data.atendimento.id}`;
+                }
+        
+                e.target.reset(); 
+            } else {
+                alertContainer.innerHTML = `<div class="alert alert-error"><span>Conflito de horário ou dados inválidos.</span></div>`;
+            }
+        } else {
+            alertContainer.innerHTML = `<div class="alert alert-error"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" x2="9" y1="9" y2="15"/><line x1="9" x2="15" y1="9" y2="15"/></svg><span>Erro ao cadastrar: ${data.message || 'Tente novamente.'}</span></div>`;
+        }
+
+    } catch (error) {
+        console.error("Erro interno no Front-end:", error);
+        alertContainer.innerHTML = `<div class="alert alert-error"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" x2="9" y1="9" y2="15"/><line x1="9" x2="15" y1="9" y2="15"/></svg><span>Erro ao conectar com o servidor.</span></div>`;
+    }
+});
     </script>
 </body>
 </html>

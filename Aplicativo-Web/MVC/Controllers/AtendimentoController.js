@@ -1,5 +1,5 @@
 const AtendimentoService = require('../../services/AtendimentoService.js')
-const UsuarioService = require('../../services/UsuarioService.js') // 🔥 FALTAVA ISSO
+const UsuarioService = require('../../services/UsuarioService.js')
 
 class AtendimentoController
 {
@@ -60,10 +60,16 @@ class AtendimentoController
        res.json({ affectedRows: affectedRows })
     }
 
-    async atendimentoDeleteAsync(req,res)
-    {
-       const affectedRows = await this.atendimentoService.deletarAtendimento(req.params.id)
-       res.json({ affectedRows: affectedRows })
+    async atendimentoDeleteAsync(req, res) {
+        try {
+            const affectedRows = await this.atendimentoService.deletarAtendimento(req.params.id);
+            
+            // Retorna o JSON com o número de linhas afetadas (agora com um valor válido: 0 ou 1)
+            return res.json({ affectedRows: affectedRows });
+        } catch (error) {
+            console.error("Erro ao deletar atendimento no banco:", error);
+            return res.status(500).json({ error: "Erro interno do servidor ao deletar." });
+        }
     }
 
 }

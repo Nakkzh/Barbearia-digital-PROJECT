@@ -1,17 +1,20 @@
+const moment = require('moment')
+
 class Atendimento
 {
     #id
-    #nomeCLiente
+    #nomeCliente
     #telefone
     #horarioAtendimento
     #dataAtendimento
     #dataNascimento
     #tipoServico
     #profissional
+      
 
-    constructor(nomeCLiente, telefone, horarioAtendimento, dataAtendimento, dataNascimento, tipoServico, profissional)
+    constructor(nomeCliente, telefone, horarioAtendimento, dataAtendimento, dataNascimento, tipoServico, profissional)
     {
-        this.#nomeCLiente = nomeCLiente
+        this.#nomeCliente = nomeCliente
         this.#telefone = telefone
         this.#horarioAtendimento = horarioAtendimento
         this.#dataAtendimento = dataAtendimento
@@ -22,71 +25,139 @@ class Atendimento
 
     get id()
     {
-        return this.#id
-    }
-    set id(value)
-    {
-        this.#id = value
+        return this.#id; 
     }
 
-    get nomeCLiente()
+    get nomeCliente()
     {
-        return this.#nomeCLiente
-    }
-    set nomeCLiente(value)
-    {
-        this.#nomeCLiente = value
+        return this.#nomeCliente; 
     }
 
     get telefone()
     {
-        return this.#telefone
-    }   
-    set telefone(value)
-    {
-        this.#telefone = value
+        return this.#telefone; 
     }
 
     get horarioAtendimento()
     {
-        return this.#horarioAtendimento
-    }
-    set horarioAtendimento(value)
-    {
-        this.#horarioAtendimento = value
+        return this.#horarioAtendimento; 
     }
 
     get dataAtendimento()
     {
-        return this.#dataAtendimento
-    }
-    set dataAtendimento(value)
-    {
-        this.#dataAtendimento = value
+        return this.#dataAtendimento; 
     }
 
     get dataNascimento()
     {
-        return this.#dataNascimento
+        return this.#dataNascimento; 
     }
 
     get tipoServico()
     {
-        return this.#tipoServico
+        return this.#tipoServico; 
     }
-    set tipoServico(value)
-    {
-        this.#tipoServico = value
-    }
-    
+
     get profissional()
     {
-        return this.#profissional
+        return this.#profissional; 
     }
-    set profissional(value)
+
+    set id(valor)
     {
-        this.#profissional = value
+        this.#id = valor
     }
+    
+    set nomeCliente(valor)
+    {
+        this.#nomeCliente = valor
+    }
+
+    set telefone(valor)
+    {
+        this.#telefone = valor
+    }
+
+    set horarioAtendimento(valor)
+    {
+        this.#horarioAtendimento = valor
+    }
+
+    set dataAtendimento(valor)
+    {
+        this.#dataAtendimento = valor
+    }
+
+    set dataNascimento(valor)
+    {
+        this.#dataNascimento = valor
+    }
+
+    set tipoServico(valor)
+    {
+        this.#tipoServico = valor
+    }
+
+    set profissional(valor)
+    {
+        this.#profissional = valor
+    }
+
+    validarConflitoHorario(horarioInformado, horarioPersistido)
+    {
+        let validacao = false
+        let diffData = 0;
+
+        if(!horarioPersistido) return !validacao
+
+
+        if(horarioInformado)
+        {
+            if(horarioInformado == horarioPersistido)
+            {
+                return validacao
+            }
+
+            const inicio = moment(horarioInformado, "HH:mm")
+            const fim = moment(horarioPersistido, "HH:mm")
+           
+            diffData = fim.diff(inicio,"minute")
+
+            if(this.#tipoServico == "Corte de caabelo")
+            {
+
+                if(diffData > 40)
+                {
+                    validacao = true
+                }
+
+            }
+            else if(this.#tipoServico == "Barba")
+            {
+                if(diffData > 20)
+                {
+                    validacao = true
+                }
+            }
+            else if(this.#tipoServico == "Sobrancelha")
+            {
+                if(diffData > 10)
+                {
+                    validacao = true
+                }
+            }
+            else{
+                if(diffData > 40)
+                {
+                    validacao = true
+                }
+            }
+
+        }
+
+        return validacao;
+    }
+
 
 }
 module.exports = Atendimento
