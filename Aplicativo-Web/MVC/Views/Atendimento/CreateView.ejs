@@ -100,7 +100,11 @@
                     </div>
                     <div class="form-group">
                         <label for="profissional">Profissional</label>
-                        <input type="text" id="profissional" placeholder="Digite o nome do profissional" required>
+                        <select class="lg-input" name="profissional" id="profissional">
+                            <% for(const usuario of usuarios){  %>
+                                <option value="<%= usuario.id %> "><%= usuario.nome %></option>
+                            <% } %>
+                        </select>
                     </div>
                     <div class="mt-24 flex gap-16">
                         <a href="/atendimento/list" class="btn btn-secondary">

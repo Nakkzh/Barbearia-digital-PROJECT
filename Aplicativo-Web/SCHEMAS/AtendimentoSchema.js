@@ -1,5 +1,6 @@
-const {DataTypes, Model} = require('sequelize');
-const sequelize = require('../database/dbconfig.js')
+const { DataTypes, Model } = require('sequelize');
+const sequelize = require('../DATABASE/dbconfig');
+const Usuario = require('./UsuarioSchema'); // importar Usuario
 
 class Atendimento extends Model{}
 
@@ -38,5 +39,8 @@ Atendimento.init({
     modelName: 'Atendimentos',
     tableName: 'atendimentos'
 });
+
+Usuario.hasMany(Atendimento, { foreignKey: 'usuarioId', as: 'atendimentos' });
+Atendimento.belongsTo(Usuario, { foreignKey: 'usuarioId', as: 'usuario' });
 
 module.exports = Atendimento

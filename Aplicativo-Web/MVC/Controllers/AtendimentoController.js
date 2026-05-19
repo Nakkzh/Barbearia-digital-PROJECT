@@ -1,26 +1,37 @@
 const AtendimentoService = require('../../services/AtendimentoService.js')
+const UsuarioService = require('../../services/UsuarioService.js') // 🔥 FALTAVA ISSO
 
-class AtendimentoController {
-    constructor() {
+class AtendimentoController
+{
+
+    constructor()
+    {
         this.atendimentoService = new AtendimentoService()
+        this.usuarioService = new UsuarioService()
     }
 
-    async atendimentoListView(req, res) {
+    async atendimentoListView(req, res)
+    {
         const atendimentos = await this.atendimentoService.buscarTodosAtendimentos()
         res.render("Atendimento/ListView", { atendimentos: atendimentos })
     }
 
-    async atendimentoCreateView(req, res) {
-        res.render("Atendimento/CreateView")
+    async atendimentoCreateView(req, res)
+    {
+        const usuarios = await this.usuarioService.buscarTodosUsuarios()
+        res.render("Atendimento/CreateView", {usuarios: usuarios})
     }
 
-    async atendimentoEditView(req, res) {
+    async atendimentoEditView(req, res)
+    {
         const atendimento = await this.atendimentoService.buscarAtendimento(req.params.id)
-        res.render("Atendimento/EditView", { atendimento: atendimento })
+        const usuarios = await this.usuarioService.buscarTodosUsuarios()
+        res.render("Atendimento/EditView", { atendimento: atendimento, usuarios: usuarios })
     }
 
-    async atendimentoPostAsync(req, res) {
-        const id = await this.atendimentoService.cadastrarAtendimento(
+    async atendimentoPostAsync(req,res)
+    {
+        const atendimento = await this.atendimentoService.cadastrarAtendimento(
             req.body.nomeCliente,
             req.body.telefone,
             req.body.horarioAtendimento,
@@ -29,10 +40,12 @@ class AtendimentoController {
             req.body.tipoServico,
             req.body.profissional
         )
-        res.json({ id: id })
+
+       res.json({ atendimento: atendimento })
     }
 
-    async atendimentoPutAsync(req, res) {
+    async atendimentoPutAsync(req,res)
+    {
         const affectedRows = await this.atendimentoService.atualizarAtendimento(
             req.body.id,
             req.body.nomeCliente,
@@ -43,13 +56,16 @@ class AtendimentoController {
             req.body.tipoServico,
             req.body.profissional
         )
-        res.json({ affectedRows: affectedRows })
+
+       res.json({ affectedRows: affectedRows })
     }
 
-    async atendimentoDeleteAsync(req, res) {
-        const affectedRows = await this.atendimentoService.deletarAtendimento(req.params.id)
-        res.json({ affectedRows: affectedRows })
+    async atendimentoDeleteAsync(req,res)
+    {
+       const affectedRows = await this.atendimentoService.deletarAtendimento(req.params.id)
+       res.json({ affectedRows: affectedRows })
     }
+
 }
 
 module.exports = new AtendimentoController()

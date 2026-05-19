@@ -1,6 +1,6 @@
 const express = require('express')
 const router = require('./MVC/Routes/config.js')
-const sequelize = require('./database/dbconfig')
+const sequelize = require('./DATABASE/dbconfig')
 
 class Server
 {
@@ -12,7 +12,7 @@ class Server
         this.app = express()
         this.port = port
 
-        sequelize.sync({ alter: true })
+        sequelize.sync()
 
         this.app.use(express.json())
         this.app.use(express.urlencoded({ extended: true }))
